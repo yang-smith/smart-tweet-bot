@@ -1,2 +1,4 @@
 tweepy
-dotenv
+python-dotenv
+python-telegram-bot
+openai
