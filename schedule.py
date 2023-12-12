@@ -1,15 +1,38 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 import time
+from tweet import tweet_post
+
+content_list = []
+scheduler = BackgroundScheduler()
+job = None
 
 def action():
     print("Action function called at", datetime.now())
+    if content_list:
+        content = content_list.pop(0)
+        tweet_post(content)
+        print(content)
+    else:
+        print("list is empty.")
+    
 
 def schedule_daily_action(hour, minute):
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(action, 'cron', hour=hour, minute=minute)
+    global job
+    job = scheduler.add_job(action, 'cron', hour=hour, minute=minute)
     scheduler.start()
     print(f"Action scheduled for every day at {hour}:{minute}")
+
+def reset_time(time):
+    hour, minute = time.split(':')
+    global job
+    if job is None:
+        schedule_daily_action(int(hour),int(minute))
+    else:
+        scheduler.reschedule_job(job.id, trigger='cron', hour=int(hour), minute=int(minute))
+        print(f"Action scheduled for every day at {hour}:{minute}")
+
+
 
 # 调度 action 函数在每天的 12:20 执行
 # schedule_daily_action(12, 23)

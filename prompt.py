@@ -17,6 +17,7 @@ prompt_metadata = """
 应使用有趣、吸引人的表达方式。
 文字表达简约优雅
 遵守Twitter内容发布的一般规范和准则。
+Twitter's character limit is 280 characters for a standard tweet.
 
 ##原始tweet内容：
 {base}
