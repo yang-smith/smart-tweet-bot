@@ -1,2 +1,6 @@
 smart-tweet-bot
 .env
+__pycache__
+errors.log
+# chroma_db
+test.txt
