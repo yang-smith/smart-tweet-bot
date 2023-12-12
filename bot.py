@@ -4,7 +4,7 @@ import ai
 from dotenv import load_dotenv
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext, ConversationHandler
-from schedule import content_list, reset_time, schedule_daily_action
+from schedule import append_content, reset_time
 
 
 # Enable logging
@@ -65,7 +65,7 @@ async def add_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
 async def handle_add(update: Update, context: CallbackContext) -> None:
     user_message = update.message.text
-    content_list.append(user_message)
+    append_content(user_message)
     await update.message.reply_text("add into list.")
     return ConversationHandler.END
 

@@ -3,16 +3,28 @@ from datetime import datetime
 import time
 from tweet import tweet_post
 
-content_list = []
+
 scheduler = BackgroundScheduler()
 job = None
+content_file = 'contents.txt'  # 定义内容存储的文件名
+
+def load_contents():
+    with open(content_file, 'r') as file:
+        return file.read().splitlines()
+
+def append_content(new_content):
+    with open(content_file, 'a') as file:
+        file.write(new_content + '\n')
 
 def action():
     print("Action function called at", datetime.now())
-    if content_list:
-        content = content_list.pop(0)
+    contents = load_contents()
+    if contents:
+        content = contents.pop(0)
         tweet_post(content)
         print(content)
+        with open(content_file, 'w') as file:
+            file.writelines('\n'.join(contents) + '\n')
     else:
         print("list is empty.")
     
