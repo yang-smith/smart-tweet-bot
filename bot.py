@@ -1,8 +1,11 @@
 import logging
 import os
+import ai
 from dotenv import load_dotenv
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackContext, ConversationHandler
+
+
 
 # Enable logging
 logging.basicConfig(
@@ -35,30 +38,22 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(update.message.text)
 
 
-async def ask_chatgpt(question: str) -> str:
-    vectorstore = db_init()
-    result = ""
-    model = ChatOpenAI(model="gpt-3.5-turbo")
-    prompt = ChatPromptTemplate.from_template(prompt_vector)
-    chain = prompt | model | StrOutputParser()
-    result_str = show_search(query=question, db=vectorstore)
-    result = chain.invoke({"context": result_str, "question": question})
-    return result
 
 
-async def answer_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+async def enhance_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     await update.message.reply_text(
         "Please type the message you want to send to ChatGPT.",
         reply_markup=ForceReply(selective=True),
     )
-    return ANSWER
+    # return ANSWER
 
-async def handle_answer(update: Update, context: CallbackContext) -> None:
+async def handle_enhance(update: Update, context: CallbackContext) -> None:
     user_message = update.message.text
-    chatgpt_response = await ask_chatgpt(user_message)
+    chatgpt_response = await ai.ai_enhance(user_message)
     await update.message.reply_text(chatgpt_response)
-    return ConversationHandler.END
+    # return ConversationHandler.END
 
 COLLECT, ANSWER = range(2)
 
@@ -71,6 +66,10 @@ def main() -> None:
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
+
+    application.add_handler(CommandHandler("enhance", enhance_command))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_enhance))
+
     
     # Run the bot until the user presses Ctrl-C
     application.run_polling(allowed_updates=Update.ALL_TYPES)

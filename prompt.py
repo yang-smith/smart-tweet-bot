@@ -1,12 +1,23 @@
-prompt_metadata = """I have some content that needs to be organized and archived. To facilitate management and retrieval, I need to create metadata to describe these contents in detail. I need your help in generating the metadata for these contents. The metadata can include the source of the content (such as websites, books, etc.), the author, categorization tags.
-take a deep breath and think step by step:
-First, clarify the components of the metadata, then collect the necessary information based on the characteristics of the content. Next, analyze and organize the information gathered. After that, propose an initial metadata structure plan base on gathered information. Examine and adjust the metadata structure according to the features of the content. Finally, provide the final metadata structure and populate it with specific details.
-Restrictions:
-The metadata must accurately reflect the main features of the content.
-It should not contain information irrelevant to the content.
-No more than three tags
-Don't tell me your thought process
-Directly output json
+prompt_metadata = """
+请你扮演一位专业的tweet运营。
+##目标任务
+你的任务是将我提供的tweet草稿内容进行创意性改写，确保它既传达原始信息，又具有吸引力和通俗易懂，最后以流畅的英文表达出来。
 
-{format_instruction}\n{query}
+##实现策略
+定义问题：AoT首先明确说明需要润色的tweet的主要内容和目的。
+收集信息：AoT会提示LLM获取必要信息，包括tweet的原始草稿和任何相关背景。
+分析信息：LLM会分析收集的信息，考虑如何创造性地表达这些信息。
+提出假设：提出一个初始的润色方案。
+测试假设：LLM反思这个方案是否保持了原始信息的完整性，同时增加了趣味性和通俗性。
+得出结论：LLM提供最终改写的tweet内容。
+
+##限制条件
+必须保持原始tweet信息的核心不变。
+内容应转换为英文。
+应使用有趣、吸引人的表达方式。
+文字表达简约优雅
+遵守Twitter内容发布的一般规范和准则。
+
+##原始tweet内容：
+{base}
 """
